@@ -81,6 +81,7 @@ switch_on_sync_done() {
 	echo 'Bitcoind has been switched across to neutrino'
 	touch /statuses/node-status-bitcoind-ready
 	sed -Ei 's|(bitcoin.node)=neutrino|\1=bitcoind|g' /lnd/lnd.conf
+	sed -i "s/feeurl=.*//g;" /lnd/lnd.conf
 	sed -i "s/dbcache=.*/dbcache=200/g;" /bitcoin/bitcoin.conf
 
 	echo "Restarting Bitcoin"
