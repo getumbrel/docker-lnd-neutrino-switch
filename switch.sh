@@ -85,6 +85,7 @@ switch_on_sync_done() {
 	sed -i "s/dbcache=.*/dbcache=200/g;" /bitcoin/bitcoin.conf
 
 	echo "Restarting Bitcoin"
+	docker exec  "$BITCOIN_CONTAINER_NAME" bitcoin-cli stop
 	docker stop  "$BITCOIN_CONTAINER_NAME"
 	docker start "$BITCOIN_CONTAINER_NAME"
 
