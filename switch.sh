@@ -19,7 +19,6 @@ RPCPASS="${RPCPASS:-$(cat /secrets/rpcpass.txt)}"  						# Default password loca
 SLEEPTIME="${SLEEPTIME:-3600}"                     						# Default sleep: 3600
 JSONRPCURL="${JSONRPCURL:-http://10.254.2.2:8332}" 						# Default RPC endpoint: http://10.254.2.2:8332
 LND_CONTAINER_NAME="${LND_CONTAINER_NAME:-lnd}"    						# Default Docker container name: lnd
-BITCOIN_CONTAINER_NAME="${BITCOIN_CONTAINER_NAME:-bitcoin}"		# Default Docker container name: bitcoin
 
 PREV_MATCH=
 
@@ -82,11 +81,6 @@ switch_on_sync_done() {
 	touch /statuses/node-status-bitcoind-ready
 	sed -Ei 's|(bitcoin.node)=neutrino|\1=bitcoind|g' /lnd/lnd.conf
 	sed -i "s/^feeurl=.*//g;" /lnd/lnd.conf
-	sed -i "s/dbcache=.*/dbcache=200/g;" /bitcoin/bitcoin.conf
-
-	echo "Restarting Bitcoin"
-	docker stop  "$BITCOIN_CONTAINER_NAME"
-	docker start "$BITCOIN_CONTAINER_NAME"
 
 	echo "Restarting LND"
 	docker stop  "$LND_CONTAINER_NAME"
